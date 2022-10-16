@@ -1,15 +1,15 @@
+import { CustomRepository } from 'src/database/lib/typeorm-ex.decorator';
+import { RegisterStudents } from 'src/dtos/teacher.dto';
+import { Student } from 'src/entities/student.entity';
+import { Teacher } from 'src/entities/teacher.entity';
 import { Repository } from 'typeorm';
-import { CustomRepository } from './database/lib/typeorm-ex.decorator';
-import { RegisterStudents } from './dtos/teacher.dto';
-import { Student } from './entities/student.entity';
-import { Teacher } from './entities/teacher.entity';
 
 @CustomRepository(Teacher)
-export class AppRepository extends Repository<Teacher> {
+export class TeacherRepository extends Repository<Teacher> {
   /**
    * register students
    */
-  async registerStudents(
+  public async registerStudents(
     foundTeacher: Teacher,
     registerStudents: RegisterStudents,
   ): Promise<Teacher> {
