@@ -12,16 +12,20 @@ export class TeacherRepository extends Repository<Teacher> {
   public async registerStudents(
     foundTeacher: Teacher,
     registerStudents: RegisterStudents,
-  ): Promise<Teacher> {
-    const newStudents = [];
-    registerStudents.students.map((student) => {
-      const newStudent = new Student();
-      newStudent.email = student;
-      newStudent.status = true;
-      newStudents.push(newStudent);
-    });
-    foundTeacher.students = newStudents;
-    await foundTeacher.save();
-    return foundTeacher;
+  ): Promise<string> {
+    try {
+      const newStudents = [];
+      registerStudents.students.map((student) => {
+        const newStudent = new Student();
+        newStudent.email = student;
+        newStudent.status = true;
+        newStudents.push(newStudent);
+      });
+      foundTeacher.students = newStudents;
+      await foundTeacher.save();
+      return '1';
+    } catch (err) {
+      return 'Error register students!';
+    }
   }
 }

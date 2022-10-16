@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegisterStudents } from 'src/dtos/teacher.dto';
-import { Teacher } from 'src/entities/teacher.entity';
 import { TeacherRepository } from './teacher.repository';
 
 @Injectable()
@@ -11,22 +10,24 @@ export class TeacherService {
     private teacherRepo: TeacherRepository,
   ) {}
 
-  async registerStudents(registerStudents: RegisterStudents): Promise<boolean> {
+  public async registerStudents(
+    registerStudents: RegisterStudents,
+  ): Promise<string> {
     const foundTeacher = await this.teacherRepo.findOne({
       where: { email: registerStudents.teacher },
     });
     if (foundTeacher) {
       this.teacherRepo.registerStudents(foundTeacher, registerStudents);
     } else {
-      return false;
+      return 'Teacher not found';
     }
-    return true;
+    return '1';
   }
 
   /**
    * Get teachers student
    */
-  async getTeacherStudents(teacherEmail: string) {
+  public async getTeacherStudents(teacherEmail: string) {
     return await this.teacherRepo.findOne({
       where: { email: teacherEmail },
       relations: ['students'],

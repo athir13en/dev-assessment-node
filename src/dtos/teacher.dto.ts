@@ -16,3 +16,9 @@ export class RegisterStudents {
   @ArrayMinSize(1)
   students: string[];
 }
+
+export class SuspendStudent {
+  @IsEmail()
+  @IsNotEmpty()
+  student: string;
+}
