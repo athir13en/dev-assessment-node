@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { TypeORMDBModule } from './database/typeormdb.module';
 
 @Module({
-  imports: [],
+  imports: [TypeORMDBModule],
   controllers: [AppController],
   providers: [AppService],
 })
