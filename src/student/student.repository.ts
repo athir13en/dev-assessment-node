@@ -1,5 +1,5 @@
-import { CustomRepository } from 'src/database/lib/typeorm-ex.decorator';
-import { Student } from 'src/entities/student.entity';
+import { CustomRepository } from '../database/lib/typeorm-ex.decorator';
+import { Student } from '../entities/student.entity';
 import { Repository } from 'typeorm';
 
 @CustomRepository(Student)
