@@ -1,5 +1,4 @@
 import { ArrayMinSize, IsArray, IsEmail, IsNotEmpty } from 'class-validator';
-import { studentDTO } from './student.dto';
 
 export class CreateTeacherDTO {
   @IsEmail()
