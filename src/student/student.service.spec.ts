@@ -28,7 +28,6 @@ describe('StudentService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         StudentService,
-        // StudentRepository,
         {
           provide: StudentRepository,
           useValue: mockStudentRepository,
@@ -43,7 +42,7 @@ describe('StudentService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should give expected return', async () => {
+  it('should give expected return as "1"', async () => {
     mockStudentRepository.suspendStudent = jest.fn().mockReturnValue('1');
     const _suspendStudent = new SuspendStudent();
     _suspendStudent.student = 'student1@mail.com';
@@ -51,7 +50,7 @@ describe('StudentService', () => {
     expect(suspendStudent).toEqual('1');
   });
 
-  it('should give expected return', async () => {
+  it('should give expected return as list of students', async () => {
     const studentsWithoutTeacher = await service.getAllStudentWithoutTeacher();
     expect(studentsWithoutTeacher).toHaveLength(2);
   });
