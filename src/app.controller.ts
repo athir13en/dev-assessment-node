@@ -9,7 +9,11 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AppService } from './app.service';
-import { RegisterStudents, SuspendStudent } from './dtos/teacher.dto';
+import {
+  RegisterStudents,
+  RetrieveNotification,
+  SuspendStudent,
+} from './dtos/teacher.dto';
 import { StudentService } from './student/student.service';
 import { TeacherService } from './teacher/teacher.service';
 
@@ -78,6 +82,43 @@ export class AppController {
       return response.status(HttpStatus.NO_CONTENT).send();
     } else {
       return response.status(HttpStatus.BAD_REQUEST).send({ message: _result });
+    }
+  }
+
+  @Post('retrievefornotifications')
+  public async retrievefornotifications(
+    @Body() retrieveNotification: RetrieveNotification,
+    @Res() response: Response,
+  ) {
+    try {
+      let _allStudents = [];
+      // get teacher's student
+      const _teacher = await this.teacherService.getTeacherStudents(
+        retrieveNotification.teacher,
+      );
+      if (!_teacher) {
+        return response
+          .status(HttpStatus.BAD_REQUEST)
+          .send({ message: 'Teacher not found!' });
+      }
+      _allStudents = [..._allStudents, ..._teacher.students];
+      // add student if @ exist
+      if (retrieveNotification.notification.indexOf('@') > 0) {
+        const _AStudentList = retrieveNotification.notification.split(' @');
+        _AStudentList.shift();
+        const _rAStudentList = await this.studentService.getStudentsByEmail(
+          _AStudentList,
+        );
+        _allStudents = [..._allStudents, ..._rAStudentList];
+      }
+      const _finalResult = _allStudents
+        .filter((x) => x.status)
+        .map((x) => x.email);
+      return response.status(HttpStatus.OK).send({ recipients: _finalResult });
+    } catch (err) {
+      return response
+        .status(HttpStatus.BAD_REQUEST)
+        .send({ message: 'Error getting students!' });
     }
   }
 }

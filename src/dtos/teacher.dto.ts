@@ -22,3 +22,12 @@ export class SuspendStudent {
   @IsNotEmpty()
   student: string;
 }
+
+export class RetrieveNotification {
+  @IsEmail()
+  @IsNotEmpty()
+  teacher: string;
+
+  @IsNotEmpty()
+  notification: string;
+}

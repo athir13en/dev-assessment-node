@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SuspendStudent } from 'src/dtos/teacher.dto';
+import { In } from 'typeorm';
 import { StudentRepository } from './student.repository';
 
 @Injectable()
@@ -38,5 +39,14 @@ export class StudentService {
     } else {
       return 'Student not found!';
     }
+  }
+
+  /**
+   * get students by email
+   */
+  public async getStudentsByEmail(_emails: string[]) {
+    return await this.studentRepo.findBy({
+      email: In(_emails),
+    });
   }
 }
