@@ -39,9 +39,9 @@ export class AppController {
       registerStudents,
     );
     if (_result === '1') {
-      return response.status(HttpStatus.NO_CONTENT).send();
+      return response.status(HttpStatus.NO_CONTENT).json();
     } else {
-      return response.status(HttpStatus.BAD_REQUEST).send({ message: _result });
+      return response.status(HttpStatus.BAD_REQUEST).json({ message: _result });
     }
   }
 
@@ -64,11 +64,11 @@ export class AppController {
         ..._resultSt.map((x) => x.email),
         ..._resultTes.map((x) => x.email),
       ];
-      return response.status(HttpStatus.OK).send({ students: _result });
+      return response.status(HttpStatus.OK).json({ students: _result });
     } catch (err) {
       return response
         .status(HttpStatus.BAD_REQUEST)
-        .send({ message: 'Error getting common students' });
+        .json({ message: 'Error getting common students' });
     }
   }
 
@@ -79,9 +79,9 @@ export class AppController {
   ) {
     const _result = await this.studentService.suspendStudent(suspendStudent);
     if (_result === '1') {
-      return response.status(HttpStatus.NO_CONTENT).send();
+      return response.status(HttpStatus.NO_CONTENT).json();
     } else {
-      return response.status(HttpStatus.BAD_REQUEST).send({ message: _result });
+      return response.status(HttpStatus.BAD_REQUEST).json({ message: _result });
     }
   }
 
@@ -99,7 +99,7 @@ export class AppController {
       if (!_teacher) {
         return response
           .status(HttpStatus.BAD_REQUEST)
-          .send({ message: 'Teacher not found!' });
+          .json({ message: 'Teacher not found!' });
       }
       _allStudents = [..._allStudents, ..._teacher.students];
       // add student if @ exist
@@ -114,11 +114,11 @@ export class AppController {
       const _finalResult = _allStudents
         .filter((x) => x.status)
         .map((x) => x.email);
-      return response.status(HttpStatus.OK).send({ recipients: _finalResult });
+      return response.status(HttpStatus.OK).json({ recipients: _finalResult });
     } catch (err) {
       return response
         .status(HttpStatus.BAD_REQUEST)
-        .send({ message: 'Error getting students!' });
+        .json({ message: 'Error getting students!' });
     }
   }
 }
