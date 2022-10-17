@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CustomMessages } from 'src/app.constant';
 import { SuspendStudent } from 'src/dtos/teacher.dto';
 import { In } from 'typeorm';
 import { StudentRepository } from './student.repository';
@@ -33,11 +34,11 @@ export class StudentService {
       if (_foundStudent.status) {
         this.studentRepo.suspendStudent(_foundStudent);
       } else {
-        return 'Student already suspended!';
+        return CustomMessages.studentAlreadySuspended;
       }
-      return '1';
+      return CustomMessages.success;
     } else {
-      return 'Student not found!';
+      return CustomMessages.studentNotFound;
     }
   }
 

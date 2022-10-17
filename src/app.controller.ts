@@ -8,6 +8,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { CustomMessages } from './app.constant';
 import { AppService } from './app.service';
 import {
   RegisterStudents,
@@ -35,13 +36,21 @@ export class AppController {
     @Body() registerStudents: RegisterStudents,
     @Res() response: Response,
   ) {
-    const _result = await this.teacherService.registerStudents(
-      registerStudents,
-    );
-    if (_result === '1') {
-      return response.status(HttpStatus.NO_CONTENT).json();
-    } else {
-      return response.status(HttpStatus.BAD_REQUEST).json({ message: _result });
+    try {
+      const _result = await this.teacherService.registerStudents(
+        registerStudents,
+      );
+      if (_result === CustomMessages.success) {
+        return response.status(HttpStatus.NO_CONTENT).json();
+      } else {
+        return response
+          .status(HttpStatus.BAD_REQUEST)
+          .json({ message: _result });
+      }
+    } catch (err) {
+      return response
+        .status(HttpStatus.BAD_REQUEST)
+        .json({ message: CustomMessages.registerStudentsError });
     }
   }
 
@@ -68,7 +77,7 @@ export class AppController {
     } catch (err) {
       return response
         .status(HttpStatus.BAD_REQUEST)
-        .json({ message: 'Error getting common students' });
+        .json({ message: CustomMessages.commontStudentsError });
     }
   }
 
@@ -77,11 +86,19 @@ export class AppController {
     @Body() suspendStudent: SuspendStudent,
     @Res() response: Response,
   ) {
-    const _result = await this.studentService.suspendStudent(suspendStudent);
-    if (_result === '1') {
-      return response.status(HttpStatus.NO_CONTENT).json();
-    } else {
-      return response.status(HttpStatus.BAD_REQUEST).json({ message: _result });
+    try {
+      const _result = await this.studentService.suspendStudent(suspendStudent);
+      if (_result === CustomMessages.success) {
+        return response.status(HttpStatus.NO_CONTENT).json();
+      } else {
+        return response
+          .status(HttpStatus.BAD_REQUEST)
+          .json({ message: _result });
+      }
+    } catch (err) {
+      return response
+        .status(HttpStatus.BAD_REQUEST)
+        .json({ message: CustomMessages.suspendStudentError });
     }
   }
 
@@ -99,7 +116,7 @@ export class AppController {
       if (!_teacher) {
         return response
           .status(HttpStatus.BAD_REQUEST)
-          .json({ message: 'Teacher not found!' });
+          .json({ message: CustomMessages.teacherNotFound });
       }
       _allStudents = [..._allStudents, ..._teacher.students];
       // add student if @ exist
@@ -118,7 +135,7 @@ export class AppController {
     } catch (err) {
       return response
         .status(HttpStatus.BAD_REQUEST)
-        .json({ message: 'Error getting students!' });
+        .json({ message: CustomMessages.retrievefornotificationsError });
     }
   }
 }

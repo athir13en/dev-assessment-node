@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CustomMessages } from 'src/app.constant';
 import { RegisterStudents } from 'src/dtos/teacher.dto';
 import { TeacherRepository } from './teacher.repository';
 
@@ -19,9 +20,9 @@ export class TeacherService {
     if (foundTeacher) {
       this.teacherRepo.registerStudents(foundTeacher, registerStudents);
     } else {
-      return 'Teacher not found';
+      return CustomMessages.teacherNotFound;
     }
-    return '1';
+    return CustomMessages.success;
   }
 
   /**
