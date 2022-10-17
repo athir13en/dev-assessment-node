@@ -3,6 +3,10 @@
 ## Using Nest Framework
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Database - MySQL
+Make sure your have MySQL installed in your local.
+Change MySQL config in .env in the project root.
+
 ## Installation
 
 ```bash
