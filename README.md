@@ -5,6 +5,7 @@
 
 ## Database - MySQL
 Make sure your have MySQL installed in your local.
+Database created. (Tables will be create by codes).
 Change MySQL config in .env in the project root.
 
 ## Installation
