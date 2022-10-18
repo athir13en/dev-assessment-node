@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CustomMessages } from 'src/app.constant';
-import { RegisterStudents } from 'src/dtos/teacher.dto';
+import { CustomMessages } from '../app.constant';
+import { RegisterStudents } from '../dtos/teacher.dto';
 import { TeacherRepository } from './teacher.repository';
 
 @Injectable()

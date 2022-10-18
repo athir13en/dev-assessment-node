@@ -1,4 +1,7 @@
+import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Response } from 'express';
+import { CustomMessages } from './app.constant';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import {
@@ -50,13 +53,27 @@ describe('AppController', () => {
   const mockResponse = () => {
     const res: any = {};
     res.status = jest.fn().mockReturnValue(res);
-    res.json = jest.fn().mockReturnValue(res);
+    res.json = jest.fn().mockImplementation().mockReturnValue({
+      status: HttpStatus.NO_CONTENT,
+    });
+    return res;
+  };
+
+  const mockResponseError = () => {
+    const res: any = {};
+    res.status = jest.fn().mockReturnValue(res);
+    res.json = jest.fn().mockImplementation().mockReturnValue({
+      status: HttpStatus.BAD_REQUEST,
+      message: CustomMessages.studentNotFound,
+    });
     return res;
   };
 
   describe('register', () => {
-    it('should be able to accept RegisterStudents object and return', async () => {
-      mockTeacherService.registerStudents = jest.fn().mockReturnValue('1');
+    it('should be able to accept RegisterStudents object and return 204', async () => {
+      mockTeacherService.registerStudents = jest
+        .fn()
+        .mockReturnValue(CustomMessages.success);
       const _registerStudent = new RegisterStudents();
       _registerStudent.teacher = 'teacher1@email.com';
       _registerStudent.students = ['student1@mail.com', 'student2@mail.com'];
@@ -64,12 +81,12 @@ describe('AppController', () => {
         _registerStudent,
         mockResponse(),
       );
-      expect(regStudent).toHaveProperty('status');
+      expect(regStudent.status).toEqual(HttpStatus.NO_CONTENT);
     });
   });
 
   describe('commonstudents', () => {
-    it('should be able to accept parameters and return', async () => {
+    it('should be able to accept parameters and return object with property - status', async () => {
       const commonsStudent = await appController.commontStudents(
         { teacher: ['teacher1@email.com', 'teacher2@email.com'] },
         mockResponse(),
@@ -79,8 +96,10 @@ describe('AppController', () => {
   });
 
   describe('suspend', () => {
-    it('should be able to accept SuspendStudent object and return', async () => {
-      mockStudentService.suspendStudent = jest.fn().mockReturnValue('1');
+    it('should be able to accept SuspendStudent object and return object with property - status', async () => {
+      mockStudentService.suspendStudent = jest
+        .fn()
+        .mockReturnValue(CustomMessages.success);
       const _suspentStudent = new SuspendStudent();
       _suspentStudent.student = 'student1@mail.com';
       const suspStudent = await appController.suspend(
@@ -88,6 +107,23 @@ describe('AppController', () => {
         mockResponse(),
       );
       expect(suspStudent).toHaveProperty('status');
+    });
+
+    it('should be able to return status code 400 with error message', async () => {
+      mockStudentService.suspendStudent = jest
+        .fn()
+        .mockReturnValue(CustomMessages.studentNotFound);
+      const _suspentStudent = new SuspendStudent();
+      _suspentStudent.student = 'studentNotExistance@mail.com';
+      const suspStudent = await appController.suspend(
+        _suspentStudent,
+        mockResponseError(),
+      );
+      expect(suspStudent.status).toEqual(HttpStatus.BAD_REQUEST);
+      expect(suspStudent).toEqual({
+        status: HttpStatus.BAD_REQUEST,
+        message: CustomMessages.studentNotFound,
+      });
     });
   });
 
